@@ -11,6 +11,7 @@ import {Route,BrowserRouter, Switch} from "react-router-dom";
 import {FourOhFour} from "./pages/four-oh-four/FourOhFour";
 import {Home} from "./pages/home/Home";
 import {UserPosts} from "./pages/userPosts/UserPosts";
+import {Posts} from "./pages/posts/Posts";
 
 const store = createStore(reducers,applyMiddleware(thunk));
 
@@ -20,6 +21,7 @@ const Routing = (store) => (
 		<BrowserRouter>
 			<Switch>
 				<Route exact path="/user/:userId" component={UserPosts} userId=":userId"/>
+				<Route exact path="/posts" component={Posts} />
 				<Route exact path="/" component={Home}/>
 				<Route component={FourOhFour}/>
 			</Switch>
@@ -29,7 +31,3 @@ const Routing = (store) => (
 );
 
 ReactDOM.render(Routing(store) , document.querySelector("#root"));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA

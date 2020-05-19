@@ -1,61 +1,37 @@
-import {connect} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import React, {useEffect} from 'react';
 import {getUserPosts} from "../../shared/actions/get-user-posts";
+import {PostCard} from "../../shared/PostCard/PostCard";
+import {getUserByUserId} from "../../shared/actions/get-users";
 
-const UserPostsComponent = (props) => {
-	const {getUserPosts, match, user, posts} = props;
+export const UserPosts = ({match}) => {
 
-	useEffect(() => {
-			getUserPosts(match.params.userId)
-		},
-		[getUserPosts, match.params.userId]
-	);
+	const dispatch = useDispatch();
 
-	const renderUserName = () => {
-
-		if(user) {
-			return (
-				<h2>{user.name}</h2>
-			);
-		}
+	const sideEffects = () => {
+		dispatch(getUserPosts(match.params.userId));
+		dispatch(getUserByUserId(match.params.userId));
 	};
 
-	const renderPosts = () => {
-		if (posts) {
-			return posts.map(index => {
-				return (
+	const sideEffectInputs = [match.params.userId];
 
-			<div className="card text-white bg-dark mb-3"  key={index.postId}>
-				<div className="card-body">
-					<h5 className="card-title">{index.title}</h5>
-					<p className="card-text">{index.body}</p>
-					<p className="card-text">
-						<small className="text-muted">{index.username}</small>
-					</p>
-				</div>
-			</div>
-				)
-			})
-		}
-	};
+	useEffect(sideEffects, sideEffectInputs);
+
+	const posts = useSelector(state => (
+		state.posts ? state.posts : []
+	));
+	const user = useSelector(state => (
+		state.users ? state.users[0] : null
+	));
 
 	return (
 		<>
 			<main className="container">
-				{renderUserName()}
+				{user && (<h2>{user.name}</h2>)}
 				<div className="card-group card-columns">
-				{renderPosts()}
+					{posts.map(post => <PostCard post={post} key={post.postId}/>)}
 				</div>
 			</main>
 		</>
 	)
 };
-
-const mapStateToProps = ({userPosts}) => {
-	if(userPosts.user && userPosts.posts ) {
-		return {user: userPosts.user, posts: userPosts.posts}
-	}
-	return {user: null, posts: []}
-};
-
-export const UserPosts = connect(mapStateToProps, {getUserPosts})(UserPostsComponent);

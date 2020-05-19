@@ -1,15 +1,26 @@
 import React, {useEffect} from 'react';
-import {connect} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {UserList} from "./UserList";
-import {getAllUsers} from "../../shared/actions/get-all-users";
+import {getUsers} from "../../shared/actions/get-users";
 
-const HomeComponent = ({getAllUsers, users}) => {
+export const Home= () => {
 
-	useEffect(() => {
-			getAllUsers()
-		},
-		[getAllUsers]
-	);
+	// use selector to set users to users stored in state
+	const users = useSelector(state => state.users);
+
+	// use dispatch from redux to dispatch actions
+	const dispatch = useDispatch();
+
+	// get users
+	const effects = () => {
+		dispatch(getUsers())
+	};
+
+	// set inputs to an empty array before update
+	const inputs = [];
+
+	// do this effect on component update
+	useEffect(effects, inputs);
 
 	return (
 			<main className="container">
@@ -24,16 +35,11 @@ const HomeComponent = ({getAllUsers, users}) => {
 						<th><h4>Website</h4></th>
 					</tr>
 					</thead>
-			<UserList users={users}/>
-			</table>
+					<UserList users={users}/>
+				</table>
 		</main>
 	)
 };
 
-const mapStateToProps = ({users}) => {
-	return {users};
-};
-
-export const Home = connect(mapStateToProps, {getAllUsers})(HomeComponent);
 
 
