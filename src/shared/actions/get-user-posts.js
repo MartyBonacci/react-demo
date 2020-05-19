@@ -1,4 +1,4 @@
-import {httpConfig} from "../misc/http-config";
+import {httpConfig} from "../utils/http-config";
 import _ from "lodash";
 import {getUserByUserId} from "./get-users";
 

@@ -5,16 +5,21 @@ import {getUsers} from "../../shared/actions/get-users";
 
 export const Home= () => {
 
+	// use selector to set users to users stored in state
 	const users = useSelector(state => state.users);
 
+	// use dispatch from redux to dispatch actions
 	const dispatch = useDispatch();
 
+	// get users
 	const effects = () => {
 		dispatch(getUsers())
 	};
 
+	// set inputs to an empty array before update
 	const inputs = [];
 
+	// do this effect on component update
 	useEffect(effects, inputs);
 
 	return (
